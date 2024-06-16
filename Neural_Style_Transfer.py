@@ -126,9 +126,14 @@ with col3:
     st.write("Generated Image")
     if st.session_state.clicked:
         generated_image = tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
+        st.write(" ")
+        st.write(" ")
+        st.write(" ")
+        placeholder_1 = st.empty()
+        placeholder_2 = st.empty()
         for I in range(epochs):
             train_step(generated_image)
-            if I % 50 == 0:
+            if I % 1 == 0:
                 image = tensor_to_image(generated_image)
-                st.image(image)
-                st.write(f"Epoch {I}")
+                placeholder_1.image(image)
+                placeholder_2.write(f"Epoch {I}")
