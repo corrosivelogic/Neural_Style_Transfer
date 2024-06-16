@@ -14,6 +14,15 @@ if 'clicked' not in st.session_state:
 def click_button():
     st.session_state.clicked = True
 
+def get_layer_outputs(vgg, layer_names):
+    outputs = [vgg.get_layer(layer[0]).output for layer in layer_names]
+    model = tf.keras.Model([vgg.input], outputs)
+    return model
+        
+STYLE_LAYERS = [('block1_conv1', 0.2),('block2_conv1', 0.2),('block3_conv1', 0.2),('block4_conv1', 0.2),('block5_conv1', 0.2)]
+content_layer = [('block5_conv4', 1)]
+vgg_model_outputs = get_layer_outputs(vgg, STYLE_LAYERS + content_layer)
+
 st.set_page_config(layout="wide")
 st.markdown("<h1 style='text-align: center;'>Neural Style Transfer</h1>", unsafe_allow_html=True)
 st.divider()
@@ -76,8 +85,6 @@ def compute_layer_style_cost(a_S, a_G):
     J_style_layer = (1 / (4 * n_C **2 * (n_H * n_W) **2)) * tf.reduce_sum(tf.square(tf.subtract(GS, GG)))
     return J_style_layer
 
-STYLE_LAYERS = [('block1_conv1', 0.2),('block2_conv1', 0.2),('block3_conv1', 0.2),('block4_conv1', 0.2),('block5_conv1', 0.2)]
-
 def compute_style_cost(style_image_output, generated_image_output, STYLE_LAYERS=STYLE_LAYERS):
     J_style = 0
     a_S = style_image_output[:-1]
@@ -92,14 +99,7 @@ def total_cost(J_content, J_style, alpha = 10, beta = 40):
     J = alpha * J_content + beta * J_style
     return J
 
-def get_layer_outputs(vgg, layer_names):
-    outputs = [vgg.get_layer(layer[0]).output for layer in layer_names]
-    model = tf.keras.Model([vgg.input], outputs)
-    return model
-        
 
-content_layer = [('block5_conv4', 1)]
-vgg_model_outputs = get_layer_outputs(vgg, STYLE_LAYERS + content_layer)
 
 def clip_0_1(image):
     return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
