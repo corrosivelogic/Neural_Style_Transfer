@@ -14,6 +14,9 @@ if 'clicked' not in st.session_state:
 def click_button():
     st.session_state.clicked = True
 
+img_size = 400
+vgg = tf.keras.applications.VGG19(include_top=False,input_shape=(img_size, img_size, 3),weights='vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5')
+vgg.trainable = False
 def get_layer_outputs(vgg, layer_names):
     outputs = [vgg.get_layer(layer[0]).output for layer in layer_names]
     model = tf.keras.Model([vgg.input], outputs)
@@ -27,9 +30,6 @@ st.set_page_config(layout="wide")
 st.markdown("<h1 style='text-align: center;'>Neural Style Transfer</h1>", unsafe_allow_html=True)
 st.divider()
 
-img_size = 400
-vgg = tf.keras.applications.VGG19(include_top=False,input_shape=(img_size, img_size, 3),weights='vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5')
-vgg.trainable = False
 co1, co2, co3 , co4 = st.columns(4)
 with co2:
     epochs=st.number_input("Input number of epochs",min_value=200,max_value=20000,step=50)
