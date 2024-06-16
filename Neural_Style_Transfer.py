@@ -43,7 +43,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     content_img = st.file_uploader("Input Content Image")
     if content_img is not None:
-        content_image = np.array( Image.open(content_img).resize((img_size, img_size)))
+        content_image = np.array( Image.open(content_img).resize((img_size, img_size,3)))
         generated_image = tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
         noise = tf.random.uniform(tf.shape(generated_image), 0, 0.5)
         generated_image = tf.add(generated_image, noise)
@@ -57,7 +57,7 @@ with col1:
 with col2:
     style_img = st.file_uploader("Input Style Image")
     if style_img is not None:
-        style_image = np.array( Image.open(style_img).resize((img_size, img_size)))
+        style_image = np.array( Image.open(style_img).resize((img_size, img_size,3)))
         style_targets = vgg_model_outputs(style_image)
         preprocessed_style =  tf.Variable(tf.image.convert_image_dtype(style_image, tf.float32))
         a_S = vgg_model_outputs(preprocessed_style)
