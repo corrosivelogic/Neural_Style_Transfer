@@ -21,7 +21,6 @@ st.divider()
 img_size = 400
 vgg = tf.keras.applications.VGG19(include_top=False,input_shape=(img_size, img_size, 3),weights='vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5')
 vgg.trainable = False
-epochs=200
 co1, co2, co3 , co4 = st.columns(4)
 with co2:
     epochs=st.number_input("Input number of epochs",min_value=200,max_value=20000,step=50)
@@ -36,12 +35,25 @@ with col1:
     content_image = st.file_uploader("Input Content Image")
     if content_image is not None:
         content_image = np.array( Image.open(content_image).resize((img_size, img_size)))
+        generated_image = tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
+        noise = tf.random.uniform(tf.shape(generated_image), 0, 0.5)
+        generated_image = tf.add(generated_image, noise)
+        generated_image = tf.clip_by_value(generated_image, clip_value_min=0.0, clip_value_max=1.0)
+        content_target = vgg_model_outputs(content_image) 
+        preprocessed_content =  tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
+        a_C = vgg_model_outputs(preprocessed_content)
+        a_G = vgg_model_outputs(generated_image)
         st.image(content_image, caption="CONTENT IMAGE", use_column_width=True)
+        
 with col2:
     style_image = st.file_uploader("Input Style Image")
     if style_image is not None:
         style_image = np.array( Image.open(style_image).resize((img_size, img_size)))
+        style_targets = vgg_model_outputs(style_image)
+        preprocessed_style =  tf.Variable(tf.image.convert_image_dtype(style_image, tf.float32))
+        a_S = vgg_model_outputs(preprocessed_style)
         st.image(style_image, caption="STYLE IMAGE", use_column_width=True)
+        
 def compute_content_cost(content_output, generated_output):
     a_C = content_output[-1]
     a_G = generated_output[-1]
@@ -80,11 +92,6 @@ def total_cost(J_content, J_style, alpha = 10, beta = 40):
     J = alpha * J_content + beta * J_style
     return J
 
-generated_image = tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
-noise = tf.random.uniform(tf.shape(generated_image), 0, 0.5)
-generated_image = tf.add(generated_image, noise)
-generated_image = tf.clip_by_value(generated_image, clip_value_min=0.0, clip_value_max=1.0)
-
 def get_layer_outputs(vgg, layer_names):
     outputs = [vgg.get_layer(layer[0]).output for layer in layer_names]
     model = tf.keras.Model([vgg.input], outputs)
@@ -93,15 +100,6 @@ def get_layer_outputs(vgg, layer_names):
 
 content_layer = [('block5_conv4', 1)]
 vgg_model_outputs = get_layer_outputs(vgg, STYLE_LAYERS + content_layer)
-
-content_target = vgg_model_outputs(content_image) 
-style_targets = vgg_model_outputs(style_image)     
-
-preprocessed_content =  tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
-a_C = vgg_model_outputs(preprocessed_content)
-a_G = vgg_model_outputs(generated_image)
-preprocessed_style =  tf.Variable(tf.image.convert_image_dtype(style_image, tf.float32))
-a_S = vgg_model_outputs(preprocessed_style)
 
 def clip_0_1(image):
     return tf.clip_by_value(image, clip_value_min=0.0, clip_value_max=1.0)
