@@ -74,6 +74,23 @@ Neural_Style_Transfer_Project/
 - Pillow
 - NumPy
 
+## Challenges Faced
+
+### Model Selection
+Initially, different architectures like ResNet50 and InceptionV3 were explored, but they didn't perform as well as VGG19 for style transfer. VGG19's ability to capture detailed hierarchical features at multiple levels proved to be more effective.
+
+### Loss Function Tuning
+Finding the right balance between content and style losses was challenging. High weights on style loss resulted in abstract images with less content detail, while high weights on content loss led to insufficient style transfer. Iterative experimentation was required to find optimal weights.
+
+### Computational Intensity
+The optimization process is computationally intensive, requiring significant time and resources. This made it challenging to achieve real-time performance. Future work will focus on exploring faster approximation methods.
+
+### Noise Reduction
+Achieving a smooth texture in the generated images required careful tuning of the total variation loss. This was essential to reduce noise without compromising the artistic style.
+
+### Online Hosting
+Hosting the project online was difficult due to the resource constraint present on platforms like streamlit community servers , also the lack of GPU units makes the generation process very slow .
+
 ## Example Usage
 
 ```python
