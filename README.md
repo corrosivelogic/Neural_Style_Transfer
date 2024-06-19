@@ -3,7 +3,8 @@ hosted online : https://huggingface.co/spaces/corrosivelogic/Neural_Style_Transf
 
 
 # Neural Style Transfer Project
-
+ video demo : https://drive.google.com/file/d/1xlWyEkvDycK2DqrjvBIdNhGkMVpVMfB6/view?usp=sharing
+ 
 <img width="1439" alt="Screenshot 2024-06-19 at 11 56 01 PM" src="https://github.com/corrosivelogic/Neural_Style_Transfer/assets/99196803/faa240ec-0847-493c-904b-78c025e10763">
 <img width="480" alt="Screenshot 2024-06-19 at 11 54 32 PM" src="https://github.com/corrosivelogic/Neural_Style_Transfer/assets/99196803/ee78011c-f959-474d-ac9c-fe9f84aec7f9">
 <img width="480" alt="Screenshot 2024-06-19 at 11 54 59 PM" src="https://github.com/corrosivelogic/Neural_Style_Transfer/assets/99196803/49b5299c-a57f-45d3-97a7-556b407af269">
