@@ -100,7 +100,7 @@ The optimization process is computationally intensive, requiring significant tim
 Achieving a smooth texture in the generated images required careful tuning of the total variation loss. This was essential to reduce noise without compromising the artistic style.
 
 ### Online Hosting
-Hosting the project online was difficult due to the resource constraint present on platforms like streamlit community servers , also the lack of GPU units makes the generation process very slow .
+Hosting the project online was difficult due to the resource constraint present on platforms like streamlit community servers , also the lack of GPU units makes the generation process very slow . Also the web version seems to be incompatible with large size images.
 
 ## Example Usage
 
